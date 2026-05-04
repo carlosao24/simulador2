@@ -38,5 +38,43 @@ function guardarTasa(){
   }
 }
 
+// Función para guardar los datos del cliente
+function guardarCliente(){
+    let cedula = recuperaraTexto("idCedula")
+    let nombre = recuperaraTexto("idNombre")
+    let apellido = recuperaraTexto("idApellido")
+    let numIngresos = recuperarInt("idIngresos")
+    let numEgresos = recuperarInt("idEgresos")
+    let cliente = {}
+    cliente.cedula = cedula
+    cliente.nombre = nombre
+    cliente.apellido = apellido
+    cliente.numIngresos = numIngresos
+    cliente.numEgresos = numEgresos
+    clientes.push(cliente)
+    pintarClientes()
+}
+
+// Función para mostrar la lista de clientes con sus datos
+function pintarClientes(){
+  let contenidoTabla = `<tbody id="tablaClientes">`
+  let tabla = document.getElementById("tablaClientes")
+  for(let i = 0; i < clientes.length; i++ ){
+    let elementoCliente = clientes[i]
+    contenidoTabla += `<tr>
+          <td>${elementoCliente.cedula}</td>
+          <td>${elementoCliente.nombre}</td>
+          <td>${elementoCliente.apellido}</td>
+          <td>${elementoCliente.numIngresos}</td>
+          <td>${elementoCliente.numEgresos}</td>
+          <td>
+            <button>Actualizar</button>
+            <button>Eliminar</button>
+          </td>
+        </tr>`
+  }
+  contenidoTabla += "</tbody>"
+  tabla.innerHTML = contenidoTabla
+}
 
 //Para recuperar o mostrar información usar los métodos de la clase utilitarios, puede agregar métodos adicionales en utilitarios

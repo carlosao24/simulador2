@@ -32,15 +32,15 @@
 <section id="clientes">
   <h2>Registro de Clientes</h2>
 
-  <input type="text" >
-  <input type="text" >
-  <input type="text" >
-  <input type="number" >
-  <input type="number" >
+  <input type="text" id="idCedula" placeholder="Cédula">
+  <input type="text" id="idNombre" placeholder="Nombre">
+  <input type="text" id="idApellido" placeholder="Apellido">
+  <input type="number" id="idIngresos" placeholder="Ingresos">
+  <input type="number" id="idEgresos" placeholder="Egresos">
 
   <br>
 
-  <button >Guardar cliente</button>
+  <button onclick="guardarCliente()">Guardar cliente</button>
   <button >Limpiar</button>
 
   <table>
@@ -91,7 +91,6 @@
     </tbody>
   </table>
 </section>
-
 
 
 <script src="simulador_completo.js"></script>
