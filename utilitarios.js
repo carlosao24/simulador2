@@ -33,3 +33,5 @@ function recuperaraTexto(idComponente){
         componente.src = rutaImagen;
     
     }
+
+    

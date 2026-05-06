@@ -18,6 +18,11 @@ function ocultarSeccion(){
   let componentes2 = document.getElementById("clientes")
   let listaClass2 = componente.classList;
   listaClass2.remove("activa");
+
+  let componentes3 = document.getElementById("clientes")
+  let listaClass3 = componente.classList;
+  listaClass3.remove("activa");
+
 }
 
 function mostrarSeccion(id){
@@ -121,4 +126,80 @@ function limpiar(){
   mostrarTextoEnCaja("idIngresos","")
   mostrarTextoEnCaja("idEgresos","")
 }
+
+// PARTE DOS DEL SIMULADOR
+
+function buscarClienteCredito(){
+  let tablaClienteCredito = document.getElementById("datosClienteCredito")
+  let cedula = recuperaraTexto("buscarCedulaCredito")
+  let clienteEncontrado = buscarCliente(cedula)
+  let contenido = ""
+  if(clienteEncontrado != null){
+    clienteSeleccionado = clienteEncontrado
+    contenido += `<h3>Datos del Cliente</h3>
+                  <p><strong>Cédula: </strong>${clienteEncontrado.cedula}</p>
+                  <p><strong>Nombre: </strong>${clienteEncontrado.nombre}</p>
+                  <p><strong>Apellido: </strong>${clienteEncontrado.apellido}</p>
+                  <p><strong>Ingresos: </strong>${clienteEncontrado.numIngresos}</p>
+                  <p><strong>Egresos: </strong>${clienteEncontrado.numEgresos}</p>`
+  }else{  
+    clienteSeleccionado = null
+    contenido += "Cliente no encontrado"
+  }
+  tablaClienteCredito.innerHTML = contenido
+  
+  
+}
+
+// Reutilizar el sistema de credito anterior, pero si quieres dominar mucho más, crealo de nuevo
+function calcularDatosCredito(){
+  // Verificamos que ya se a buscado y seleccionado un cliente
+  if(clienteSeleccionado == null){
+    return alert("Primero busque y seleccione un cliente")
+  }
+
+  let ingresos = clienteSeleccionado.numIngresos
+  let egresos = clienteSeleccionado.numEgresos
+  let creditoSolicitado = parseFloat(document.getElementById("montoCredito").value)
+  let plazoAnio = parseFloat(document.getElementById("plazoCredito").value)
+  let resultadoCredito = document.getElementById("resultadoCredito")
+  let tasa = recuperarInt("tasaInteres")
+
+  // Calculos
+  let disponibleMensual = (ingresos - egresos)
+  let capacidadPago = (disponibleMensual * (50/100))
+  let interes = (plazoAnio * creditoSolicitado *(tasa/100))
+  let totalPago = creditoSolicitado + interes
+  let cuotaMensual = (totalPago/(plazoAnio*12))
+
+  let boton = document.getElementById("btnSolicitarCredito")
+
+  if(cuotaMensual > capacidadPago){
+    resultadoCredito.innerHTML = `
+    Capacidad de pago:  ${capacidadPago.toFixed(2)}<br>
+    Total a pagar:  ${totalPago.toFixed(2)}<br>
+    Cuota mensual:  ${cuotaMensual.toFixed(2)}<br>
+    RESULTADO: Rechazado`
+    resultadoCredito.className = ""
+    boton.disabled = true
+    creditoAprobado = false
+  }else{
+    resultadoCredito.innerHTML = `
+    Capacidad de pago:  ${capacidadPago.toFixed(2)}<br>
+    Total a pagar:  ${totalPago.toFixed(2)}<br>
+    Cuota mensual:  ${cuotaMensual.toFixed(2)}<br>
+    RESULTADO: Aprobado `
+    resultadoCredito.className = "aprobado"
+    boton.disabled = false
+    creditoAprobado = true
+  }
+
+}
+
+function solicitarCredito(creditoAprobado){
+  if(creditoAprobado != false){
+    alert("Felicidades tu crédito fue aprobado")
+  }
+}
+
 //Para recuperar o mostrar información usar los métodos de la clase utilitarios, puede agregar métodos adicionales en utilitarios
