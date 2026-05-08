@@ -19,9 +19,13 @@ function ocultarSeccion(){
   let listaClass2 = componente.classList;
   listaClass2.remove("activa");
 
-  let componentes3 = document.getElementById("clientes")
+  let componentes3 = document.getElementById("credito")
   let listaClass3 = componente.classList;
   listaClass3.remove("activa");
+
+  let componentes4 = document.getElementById("listaCreditos")
+  let listaClass4 = componente.classList;
+  listaClass4.remove("activa");
 
 }
 
@@ -35,9 +39,9 @@ function mostrarSeccion(id){
 }
 
 function guardarTasa(){
-  let tasa = recuperarInt("tasaInteres")
-  if(tasa >= 10 && tasa <= 20){
-    mostrarTexto("mensajeTasa","Tasa configurada correctamente: "+ tasa + "%")
+  tasaInteres = recuperarInt("tasaInteres")
+  if(tasaInteres >= 10 && tasaInteres <= 20){
+    mostrarTexto("mensajeTasa","Tasa configurada correctamente: "+ tasaInteres + "%")
   }else{
     mostrarTexto("mensajeTasa","La tasa debe estar entre 10 y 20")
   }
@@ -160,25 +164,25 @@ function calcularDatosCredito(){
 
   let ingresos = clienteSeleccionado.numIngresos
   let egresos = clienteSeleccionado.numEgresos
-  let creditoSolicitado = parseFloat(document.getElementById("montoCredito").value)
-  let plazoAnio = parseFloat(document.getElementById("plazoCredito").value)
+  montoCalculado = parseFloat(document.getElementById("montoCredito").value)
+  plazoCalculado = parseFloat(document.getElementById("plazoCredito").value)
   let resultadoCredito = document.getElementById("resultadoCredito")
-  let tasa = recuperarInt("tasaInteres")
+
 
   // Calculos
   let disponibleMensual = (ingresos - egresos)
   let capacidadPago = (disponibleMensual * (50/100))
-  let interes = (plazoAnio * creditoSolicitado *(tasa/100))
-  let totalPago = creditoSolicitado + interes
-  let cuotaMensual = (totalPago/(plazoAnio*12))
+  let interes = (plazoCalculado * montoCalculado *(tasaInteres/100))
+  let totalPago = montoCalculado + interes
+  cuotaCalculada = (totalPago/(plazoCalculado*12))
 
   let boton = document.getElementById("btnSolicitarCredito")
 
-  if(cuotaMensual > capacidadPago){
+  if(cuotaCalculada > capacidadPago){
     resultadoCredito.innerHTML = `
     Capacidad de pago:  ${capacidadPago.toFixed(2)}<br>
     Total a pagar:  ${totalPago.toFixed(2)}<br>
-    Cuota mensual:  ${cuotaMensual.toFixed(2)}<br>
+    Cuota mensual:  ${cuotaCalculada.toFixed(2)}<br>
     RESULTADO: Rechazado`
     resultadoCredito.className = ""
     boton.disabled = true
@@ -187,7 +191,7 @@ function calcularDatosCredito(){
     resultadoCredito.innerHTML = `
     Capacidad de pago:  ${capacidadPago.toFixed(2)}<br>
     Total a pagar:  ${totalPago.toFixed(2)}<br>
-    Cuota mensual:  ${cuotaMensual.toFixed(2)}<br>
+    Cuota mensual:  ${cuotaCalculada.toFixed(2)}<br>
     RESULTADO: Aprobado `
     resultadoCredito.className = "aprobado"
     boton.disabled = false
@@ -196,10 +200,55 @@ function calcularDatosCredito(){
 
 }
 
-function solicitarCredito(creditoAprobado){
-  if(creditoAprobado != false){
-    alert("Felicidades tu crédito fue aprobado")
+// arreglar y modificar variables segun las globales
+function asignarCredito(){
+  let credito = {
+    cedula: clienteSeleccionado.cedula,
+    nombre: clienteSeleccionado.nombre,
+    apellido: clienteSeleccionado.apellido,
+    monto: montoCalculado,
+    tasa: tasaInteres,
+    plazo: plazoCalculado,
+    cuota: cuotaCalculada
   }
+  creditos.push(credito)
+}
+
+function buscarCreditos(cedula){
+  let creditosEncontrados = []
+  for(let i = 0; i < creditos.length; i++){
+    let unidadCredito = creditos[i]
+    if(unidadCredito.cedula == cedula){
+      creditosEncontrados.push(unidadCredito)
+    }
+  }
+  return creditosEncontrados
+}
+
+function pintarCreditos(creditos){
+  let tabla = document.getElementById("tablaCreditos")
+  let contenidoTabla = `<tbody id="tablaCreditos">`
+  for(let i = 0; i < creditos.length; i++){
+    let unidadCredito = creditos[i]
+    contenidoTabla += `<tr>
+          <td>${unidadCredito.cedula}</td>
+          <td>${unidadCredito.nombre}</td>
+          <td>${unidadCredito.apellido}</td>
+          <td>${unidadCredito.monto}</td>
+          <td>${unidadCredito.tasa}%</td>
+          <td>${unidadCredito.plazo} años</td>
+          <td>${unidadCredito.cuota.toFixed(2)}</td>
+          <td><button>Eliminar</button></td>
+        </tr>`
+  }
+  contenidoTabla += "</tbody>"
+  tabla.innerHTML = contenidoTabla
+}
+
+function buscarCreditosCliente(){
+  let capCedula = recuperaraTexto("buscarCedulaListado")
+  let resultadoCredito = buscarCreditos(capCedula)
+  pintarCreditos(resultadoCredito)
 }
 
 //Para recuperar o mostrar información usar los métodos de la clase utilitarios, puede agregar métodos adicionales en utilitarios
