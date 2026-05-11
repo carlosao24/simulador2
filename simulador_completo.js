@@ -16,16 +16,20 @@ function ocultarSeccion(){
   listaClass.remove("activa");
 
   let componentes2 = document.getElementById("clientes")
-  let listaClass2 = componente.classList;
+  let listaClass2 = componentes2.classList;
   listaClass2.remove("activa");
 
   let componentes3 = document.getElementById("credito")
-  let listaClass3 = componente.classList;
+  let listaClass3 = componentes3.classList;
   listaClass3.remove("activa");
 
   let componentes4 = document.getElementById("listaCreditos")
-  let listaClass4 = componente.classList;
+  let listaClass4 = componentes4.classList;
   listaClass4.remove("activa");
+
+  let componentes5 = document.getElementById("contacto")
+  let listaClass5 = componentes5.classList;
+  listaClass5.remove("activa");
 
 }
 
@@ -52,12 +56,14 @@ function guardarCliente(){
     let cedula = recuperaraTexto("idCedula")
     let nombre = recuperaraTexto("idNombre")
     let apellido = recuperaraTexto("idApellido")
+    let email = recuperaraTexto("idEmail")
     let numIngresos = recuperarInt("idIngresos")
     let numEgresos = recuperarInt("idEgresos")
     let cliente = {}
     cliente.cedula = cedula
     cliente.nombre = nombre
     cliente.apellido = apellido
+    cliente.email = email
     cliente.numIngresos = numIngresos
     cliente.numEgresos = numEgresos
 
@@ -68,6 +74,7 @@ function guardarCliente(){
     }else{
       busqueda.nombre = nombre
       busqueda.apellido = apellido
+      busqueda.email = email
       busqueda.numIngresos = numIngresos
       busqueda.numEgresos = numEgresos
       //clientes.push(busqueda)
@@ -86,16 +93,38 @@ function pintarClientes(){
           <td>${elementoCliente.cedula}</td>
           <td>${elementoCliente.nombre}</td>
           <td>${elementoCliente.apellido}</td>
+          <td>${elementoCliente.email}</td>
           <td>${elementoCliente.numIngresos}</td>
           <td>${elementoCliente.numEgresos}</td>
           <td>
             <button onclick="seleccionarCliente(${elementoCliente.cedula})">Actualizar</button>
-            <button onclick="Limpiar">Eliminar</button>
+            <button onclick="eliminarCliente('${elementoCliente.cedula}')">Eliminar</button>
           </td>
         </tr>`
   }
   contenidoTabla += "</tbody>"
   tabla.innerHTML = contenidoTabla
+}
+
+function eliminarCliente(cedula) {
+  let indice = -1;
+  for (let i = 0; i < clientes.length; i++) {
+    if (clientes[i].cedula == cedula) {
+      indice = i;
+      break;
+    }
+  }
+
+  if (indice !== -1) {
+    let confirmar = confirm("¿Está seguro de que desea eliminar este cliente?");
+    if (confirmar) {
+      clientes.splice(indice, 1);
+      pintarClientes();
+      alert("Cliente eliminado exitosamente.");
+    }
+  } else {
+    alert("No se encontró el cliente para eliminar.");
+  }
 }
 
 function buscarCliente(cedula){
@@ -111,13 +140,14 @@ function buscarCliente(cedula){
   return clienteEncontrado
 }
 
-function seleccionarCliente(cliente){
-  let resultado = buscarCliente(cliente.cedula)
+function seleccionarCliente(cedula){
+  let resultado = buscarCliente(cedula)
   if(resultado != null){
     clienteSeleccionado = resultado
     mostrarTextoEnCaja("idCedula",clienteSeleccionado.cedula)
     mostrarTextoEnCaja("idNombre",clienteSeleccionado.nombre)
     mostrarTextoEnCaja("idApellido",clienteSeleccionado.apellido)
+    mostrarTextoEnCaja("idEmail",clienteSeleccionado.email)
     mostrarTextoEnCaja("idIngresos",clienteSeleccionado.numIngresos)
     mostrarTextoEnCaja("idEgresos",clienteSeleccionado.numEgresos)
   }
@@ -127,8 +157,10 @@ function limpiar(){
   mostrarTextoEnCaja("idCedula","")
   mostrarTextoEnCaja("idNombre","")
   mostrarTextoEnCaja("idApellido","")
+  mostrarTextoEnCaja("idEmail","")
   mostrarTextoEnCaja("idIngresos","")
   mostrarTextoEnCaja("idEgresos","")
+  pintarClientes()
 }
 
 // PARTE DOS DEL SIMULADOR

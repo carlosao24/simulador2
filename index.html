@@ -16,6 +16,7 @@
   <button onclick="mostrarSeccion('clientes')">Clientes</button>
   <button onclick="mostrarSeccion('credito')">Créditos</button>
   <button onclick="mostrarSeccion('listaCreditos')">Crédito registrado</button>
+  <button onclick="mostrarSeccion('contacto')">Contacto</button>
 </nav>
 
 <section id="parametros">
@@ -34,11 +35,12 @@
 <section id="clientes">
   <h2>Registro de Clientes</h2>
 
-  <input type="text" id="idCedula" placeholder="Cédula">
-  <input type="text" id="idNombre" placeholder="Nombre">
-  <input type="text" id="idApellido" placeholder="Apellido">
-  <input type="number" id="idIngresos" placeholder="Ingresos">
-  <input type="number" id="idEgresos" placeholder="Egresos">
+  <input type="text" id="idCedula" placeholder="Cédula" required>
+  <input type="text" id="idNombre" placeholder="Nombre" required>
+  <input type="text" id="idApellido" placeholder="Apellido" required>
+  <input type="text" id="idEmail" placeholder="Email" required>
+  <input type="number" id="idIngresos" placeholder="Ingresos" required>
+  <input type="number" id="idEgresos" placeholder="Egresos" required>
 
   <br>
 
@@ -51,6 +53,7 @@
         <th>Cédula</th>
         <th>Nombre</th>
         <th>Apellido</th>
+        <th>Email</th>
         <th>Ingresos</th>
         <th>Egresos</th>
         <th>Acciones</th>
@@ -110,6 +113,9 @@
   </table>
 </section>
 
+<section id="contacto">
+  <h2>Desarrollado por Carlos López</h2>
+</section>
 
 <script src="simulador_completo.js"></script>
 <script src="utilitarios.js"></script>
