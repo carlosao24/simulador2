@@ -17,6 +17,8 @@
   <button onclick="mostrarSeccion('credito')">Créditos</button>
   <button onclick="mostrarSeccion('listaCreditos')">Crédito registrado</button>
   <button onclick="mostrarSeccion('contacto')">Contacto</button>
+  <button onclick="mostrarSeccion('creditosVIP')">Creditos VIP</button>
+  <button onclick="mostrarSeccion('AcercaDe')">Acerca de</button>
 </nav>
 
 <section id="parametros">
@@ -26,6 +28,7 @@
   <input type="number" id="tasaInteres" min="10" max="20" value="15">
   <span>%</span>
 
+  <h4>El monto maximo de credito aceptado es de 10.000$</h4>
   <br>
   <button onclick="guardarTasa()">Guardar tasa</button>
 
@@ -39,6 +42,7 @@
   <input type="text" id="idNombre" placeholder="Nombre" required>
   <input type="text" id="idApellido" placeholder="Apellido" required>
   <input type="text" id="idEmail" placeholder="Email" required>
+  <input type="text" id="idTelefono" placeholder="Telefono" required>
   <input type="number" id="idIngresos" placeholder="Ingresos" required>
   <input type="number" id="idEgresos" placeholder="Egresos" required>
 
@@ -54,6 +58,7 @@
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Email</th>
+        <th>Telefono</th>
         <th>Ingresos</th>
         <th>Egresos</th>
         <th>Acciones</th>
@@ -74,6 +79,7 @@
   <div id="datosClienteCredito" class="card"></div>
 
   <input type="number" id="montoCredito" placeholder="Credito solicitado">
+  <p id="mensajeCredito"></p>
   <input type="number" id="plazoCredito" placeholder="Años plazo">
 
   <br>
@@ -115,6 +121,54 @@
 
 <section id="contacto">
   <h2>Desarrollado por Carlos López</h2>
+</section>
+
+<section id="creditosVIP">
+  <button onclick="pintarCreditosVIP(creditos)">Ver todos los VIP</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Cédula</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Monto</th>
+        <th>Tasa</th>
+        <th>Plazo</th>
+        <th>Cuota</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody id="tablaCreditosVIP">
+       
+    </tbody>
+  </table>
+</section>
+
+<section id="AcercaDe">
+  <h2>Información</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Carrera</th>
+        <th>Cursos</th>
+        <th>Aprendiendo</th>
+        <th>Hobbies</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Carlos</td>
+        <td>López</td>
+        <td>Tics en curso: curso</td>
+        <td>Desarrollo de software: en curso</td>
+        <td>JavaScript,Java,PostgreSQL</td>
+        <td>Leer,escribir, escuchar música</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
 <script src="simulador_completo.js"></script>

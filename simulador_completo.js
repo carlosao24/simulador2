@@ -8,6 +8,7 @@
   let montoCalculado = 0;
   let plazoCalculado = 0;
   let creditoAprobado = false;
+  let montoMaximo
 
   
 function ocultarSeccion(){
@@ -31,6 +32,14 @@ function ocultarSeccion(){
   let listaClass5 = componentes5.classList;
   listaClass5.remove("activa");
 
+  let componentes6 = document.getElementById("creditosVIP")
+  let listaClass6 = componentes6.classList;
+  listaClass6.remove("activa");
+
+  let componentes7 = document.getElementById("AcercaDe")
+  let listaClass7 = componentes7.classList;
+  listaClass7.remove("activa");
+
 }
 
 function mostrarSeccion(id){
@@ -43,6 +52,7 @@ function mostrarSeccion(id){
 }
 
 function guardarTasa(){
+  montoMaximo = 10000
   tasaInteres = recuperarInt("tasaInteres")
   if(tasaInteres >= 10 && tasaInteres <= 20){
     mostrarTexto("mensajeTasa","Tasa configurada correctamente: "+ tasaInteres + "%")
@@ -57,6 +67,7 @@ function guardarCliente(){
     let nombre = recuperaraTexto("idNombre")
     let apellido = recuperaraTexto("idApellido")
     let email = recuperaraTexto("idEmail")
+    let telefono = recuperaraTexto("idTelefono")
     let numIngresos = recuperarInt("idIngresos")
     let numEgresos = recuperarInt("idEgresos")
     let cliente = {}
@@ -64,6 +75,7 @@ function guardarCliente(){
     cliente.nombre = nombre
     cliente.apellido = apellido
     cliente.email = email
+    cliente.telefono = telefono
     cliente.numIngresos = numIngresos
     cliente.numEgresos = numEgresos
 
@@ -75,6 +87,7 @@ function guardarCliente(){
       busqueda.nombre = nombre
       busqueda.apellido = apellido
       busqueda.email = email
+      busqueda.telefono = telefono
       busqueda.numIngresos = numIngresos
       busqueda.numEgresos = numEgresos
       //clientes.push(busqueda)
@@ -94,6 +107,7 @@ function pintarClientes(){
           <td>${elementoCliente.nombre}</td>
           <td>${elementoCliente.apellido}</td>
           <td>${elementoCliente.email}</td>
+          <td>${elementoCliente.telefono}</td>
           <td>${elementoCliente.numIngresos}</td>
           <td>${elementoCliente.numEgresos}</td>
           <td>
@@ -102,6 +116,31 @@ function pintarClientes(){
           </td>
         </tr>`
   }
+  contenidoTabla += "</tbody>"
+  tabla.innerHTML = contenidoTabla
+}
+
+function pintarClientesVIP(){
+  let contenidoTabla = `<tbody id="tablaCreditosVIP">`
+  let tabla = document.getElementById("tablaCreditosVIP")
+
+  for (let i = 0; i < creditos.length; i++) {
+    let unidadCredito = creditos[i]
+
+    if (unidadCredito.monto >= 5000) {
+      contenidoTabla += `<tr>
+          <td>${unidadCredito.cedula}</td>
+          <td>${unidadCredito.nombre}</td>
+          <td>${unidadCredito.apellido}</td>
+          <td>${unidadCredito.monto}</td>
+          <td>${unidadCredito.tasa}%</td>
+          <td>${unidadCredito.plazo} años</td>
+          <td>${unidadCredito.cuota.toFixed(2)}</td>
+          <td><button onclick="seleccionarCliente('${unidadCredito.cedula}')">Actualizar</button></td>
+        </tr>`
+    }
+  }
+
   contenidoTabla += "</tbody>"
   tabla.innerHTML = contenidoTabla
 }
@@ -148,6 +187,7 @@ function seleccionarCliente(cedula){
     mostrarTextoEnCaja("idNombre",clienteSeleccionado.nombre)
     mostrarTextoEnCaja("idApellido",clienteSeleccionado.apellido)
     mostrarTextoEnCaja("idEmail",clienteSeleccionado.email)
+    mostrarTextoEnCaja("idTelefono",clienteSeleccionado.telefono)
     mostrarTextoEnCaja("idIngresos",clienteSeleccionado.numIngresos)
     mostrarTextoEnCaja("idEgresos",clienteSeleccionado.numEgresos)
   }
@@ -158,6 +198,7 @@ function limpiar(){
   mostrarTextoEnCaja("idNombre","")
   mostrarTextoEnCaja("idApellido","")
   mostrarTextoEnCaja("idEmail","")
+  mostrarTextoEnCaja("idTelefono","")
   mostrarTextoEnCaja("idIngresos","")
   mostrarTextoEnCaja("idEgresos","")
   pintarClientes()
@@ -176,6 +217,8 @@ function buscarClienteCredito(){
                   <p><strong>Cédula: </strong>${clienteEncontrado.cedula}</p>
                   <p><strong>Nombre: </strong>${clienteEncontrado.nombre}</p>
                   <p><strong>Apellido: </strong>${clienteEncontrado.apellido}</p>
+                  <p><strong>Email: </strong>${clienteEncontrado.email}</p>
+                  <p><strong>Telefono: </strong>${clienteEncontrado.telefono}</p>
                   <p><strong>Ingresos: </strong>${clienteEncontrado.numIngresos}</p>
                   <p><strong>Egresos: </strong>${clienteEncontrado.numEgresos}</p>`
   }else{  
@@ -197,6 +240,11 @@ function calcularDatosCredito(){
   let ingresos = clienteSeleccionado.numIngresos
   let egresos = clienteSeleccionado.numEgresos
   montoCalculado = parseFloat(document.getElementById("montoCredito").value)
+  if(montoCalculado > montoMaximo){
+    mostrarTextoEnCaja("montoCredito","")
+    mostrarTexto("mensajeCredito","Ingrese un valor menor a 10.000$")
+    return
+  }
   plazoCalculado = parseFloat(document.getElementById("plazoCredito").value)
   let resultadoCredito = document.getElementById("resultadoCredito")
 
@@ -244,6 +292,7 @@ function asignarCredito(){
     cuota: cuotaCalculada
   }
   creditos.push(credito)
+  pintarClientesVIP()
 }
 
 function buscarCreditos(cedula){
